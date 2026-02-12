@@ -245,6 +245,48 @@ body {
   }
 }
 
+.touch-flower-btn {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: linear-gradient(135deg, #ff1744, #ff6b9d);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50px;
+  padding: 15px 40px;
+  font-family: 'Georgia', serif;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 6px 25px rgba(255, 23, 68, 0.6),
+              0 0 30px rgba(255, 107, 157, 0.4);
+  animation: pulse-button 2s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+.touch-flower-btn:hover {
+  transform: translateX(-50%) scale(1.1);
+  box-shadow: 0 8px 35px rgba(255, 23, 68, 0.8),
+              0 0 40px rgba(255, 107, 157, 0.6);
+}
+
+.touch-flower-btn:active {
+  transform: translateX(-50%) scale(0.95);
+}
+
+@keyframes pulse-button {
+  0%, 100% {
+    box-shadow: 0 6px 25px rgba(255, 23, 68, 0.6),
+                0 0 30px rgba(255, 107, 157, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 35px rgba(255, 23, 68, 0.8),
+                0 0 50px rgba(255, 107, 157, 0.6);
+  }
+}
+
 .night {
   position: fixed;
   left: 50%;
@@ -1151,22 +1193,6 @@ body {
 }
 
 
-.instruction-text {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  font-family: 'Georgia', serif;
-  color: white;
-  font-size: 1.2rem;
-  letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(255, 23, 68, 0.8);
-  pointer-events: none; 
-  animation: pulse-text 2s infinite ease-in-out;
-  opacity: 0.8;
-}
-
 @keyframes pulse-text {
   0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
   50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
@@ -1188,11 +1214,11 @@ body {
   </div>
   
   <div class="valentine-message">
-    <h1>Feliz San Valentín</h1>
+
+    <h1>Feliz  San Valentín</h1>
   </div>
 
   <div class="music-controls">
-    <div class="instruction-text" id="instructionText">Toca las flores 🌹</div>
     <button class="music-button" id="playButton" title="Reproducir música">▶️</button>
     <div class="volume-control">
       <span style="color: white; font-size: 18px;">🔊</span>
@@ -1519,6 +1545,8 @@ body {
     </div>
   </div>
 
+  <button class="touch-flower-btn" onclick="touchRandomFlower()">🌸 Toca una flor 🌸</button>
+
   <script>
     const loveMessages = [
       "Eres la razón por la que creo en el amor verdadero ❤️",
@@ -1527,8 +1555,8 @@ body {
       "Eres mi persona favorita en todo el universo 💕",
       "Contigo, cada día es San Valentín 💕",
       "Tu sonrisa ilumina hasta mis días más oscuros 💕",
-      "Gracias por ser mi compañero de aventuras 🎈",
-      "El amor que siento por ti crece cada día más 🌺",
+      "Gracias por ser mi compañer@ de aventuras ❤️",
+      "El amor que siento por ti crece cada día más 💕",
       "Eres mi hogar, mi refugio, mi todo ❤️ ",
       "No hay palabras suficientes para expresar cuánto te amo ❤️",
       "Contigo descubrí el verdadero significado del amor ❤️",
@@ -1540,6 +1568,7 @@ body {
 
     let currentMessageIndex = -1;
     let musicStarted = false; // Para saber si la música ya empezó
+    let messageTimeout = null; // Para controlar el timeout del mensaje
 
     onload = () => {
       const c = setTimeout(() => {
@@ -1564,7 +1593,6 @@ body {
         const audio = document.getElementById('backgroundMusic');
         audio.src = 'cancion.mp3'; // Asegúrate que el archivo se llame así
         audio.volume = 0.5;
-        const instructionText = document.getElementById('instructionText');
 
         // Agregar evento a CADA flor
         const flowers = document.querySelectorAll('.flower');
@@ -1577,10 +1605,6 @@ body {
             if (!musicStarted) {
               audio.play().then(() => {
                 musicStarted = true;
-                // Ocultar el texto de instrucción una vez que tocan una flor
-                if (instructionText) {
-                  instructionText.style.display = 'none'; 
-                }
               }).catch(e => console.log("Error de audio:", e));
             }
           });
@@ -1594,6 +1618,15 @@ body {
       const messageDiv = document.getElementById('loveMessage');
       const messageText = document.getElementById('messageText');
       
+      // Cancelar el timeout anterior si existe
+      if (messageTimeout) {
+        clearTimeout(messageTimeout);
+        messageTimeout = null;
+      }
+      
+      // Limpiar las clases anteriores
+      messageDiv.classList.remove('hide', 'show');
+      
       let newIndex;
       do {
         newIndex = Math.floor(Math.random() * loveMessages.length);
@@ -1602,19 +1635,61 @@ body {
       currentMessageIndex = newIndex;
       messageText.textContent = loveMessages[currentMessageIndex];
       
-      messageDiv.classList.remove('hide');
-      messageDiv.classList.add('show');
+      // Mostrar el mensaje con una pequeña demora para asegurar que la animación se reinicie
+      setTimeout(() => {
+        messageDiv.classList.add('show');
+      }, 10);
       
-      setTimeout(() => closeMessage(), 5000);
+      // Programar el cierre automáticoijji
+      messageTimeout = setTimeout(() => closeMessage(), 3000);
     }
 
     function closeMessage() {
       const messageDiv = document.getElementById('loveMessage');
+      
+      // Cancelar el timeout si existe
+      if (messageTimeout) {
+        clearTimeout(messageTimeout);
+        messageTimeout = null;
+      }
+      
       messageDiv.classList.remove('show');
       messageDiv.classList.add('hide');
-      setTimeout(() => messageDiv.classList.remove('hide'), 300);
+      setTimeout(() => messageDiv.classList.remove('hide'), 900);
+    }
+
+    function touchRandomFlower() {
+      const flowers = document.querySelectorAll('.flower');
+      const randomFlower = flowers[Math.floor(Math.random() * flowers.length)];
+      randomFlower.click();
     }
   </script>
+  <script>
+const messages = [
+  "Eres la flor más hermosa de mi jardín ❤️",
+  "Cada pétalo me recuerda lo mucho que te amo 🌹",
+  "Contigo la vida florece 💖",
+  "Eres mi casualidad favorita ✨",
+  "Si pudiera elegir de nuevo, te elegiría a ti mil veces 🌷"
+];
+
+function showRandomMessage() {
+  const randomIndex = Math.floor(Math.random() * messages.length);
+  const messageBox = document.getElementById("loveMessage");
+  const messageText = document.getElementById("messageText");
+
+  messageText.textContent = messages[randomIndex];
+  messageBox.classList.remove("hide");
+  messageBox.classList.add("show");
+}
+
+function closeMessage() {
+  const messageBox = document.getElementById("loveMessage");
+  messageBox.classList.remove("show");
+  messageBox.classList.add("hide");
+}
+</script>
+
 </body>
 </html>
 
