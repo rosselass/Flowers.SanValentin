@@ -287,6 +287,92 @@ body {
   }
 }
 
+/* Media queries para dispositivos móviles */
+@media screen and (max-width: 768px) {
+  /* Título principal más pequeño en móvil */
+  .valentine-message {
+    top: 8%;
+  }
+  
+  .valentine-message h1 {
+    font-size: 6vmin;
+    letter-spacing: 0.2vmin;
+  }
+  
+  /* Popup de mensaje más pequeño */
+  .love-message {
+    padding: 20px 25px;
+    max-width: 85%;
+    margin: 0 20px;
+  }
+  
+  .love-message p {
+    font-size: 18px;
+    line-height: 1.5;
+  }
+  
+  .love-message .close-btn {
+    font-size: 24px;
+    top: 8px;
+    right: 12px;
+  }
+  
+  /* Botón "Toca una flor" más pequeño */
+  .touch-flower-btn {
+    bottom: 20px;
+    padding: 12px 30px;
+    font-size: 16px;
+  }
+  
+  /* Flores más grandes en móvil */
+  .flowers {
+    transform: scale(1.3);
+  }
+  
+  /* Ajustar controles de música */
+  .music-controls {
+    top: 15px;
+    right: 15px;
+    gap: 8px;
+  }
+  
+  .music-button {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+  
+  .volume-control {
+    padding: 8px 12px;
+  }
+  
+  .volume-slider {
+    width: 80px;
+  }
+}
+
+/* Para pantallas muy pequeñas (menos de 480px) */
+@media screen and (max-width: 480px) {
+  .valentine-message h1 {
+    font-size: 5vmin;
+  }
+  
+  .love-message p {
+    font-size: 16px;
+  }
+  
+  .touch-flower-btn {
+    padding: 10px 25px;
+    font-size: 14px;
+    bottom: 15px;
+  }
+  
+  /* Flores aún más grandes para pantallas muy pequeñas */
+  .flowers {
+    transform: scale(1.5);
+  }
+}
+
 .night {
   position: fixed;
   left: 50%;
@@ -1640,8 +1726,8 @@ body {
         messageDiv.classList.add('show');
       }, 10);
       
-      // Programar el cierre automáticoijji
-      messageTimeout = setTimeout(() => closeMessage(), 3000);
+      // Programar el cierre automático
+      messageTimeout = setTimeout(() => closeMessage(), 10000);
     }
 
     function closeMessage() {
